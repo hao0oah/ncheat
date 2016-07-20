@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.founder.database.Tx100403Dao" >
+
+	<resultMap id="txAcntMap" type="cfca.safeguard.api.bank.bean.tx.upstream.Tx100403">
+		<result column="fn20zjlx" property="idType" />
+		<result column="fn20zjbh" property="idNumber" />
+		<result column="fn20xm" property="idName" />
+		<!-- 
+		<result column="operatorName" property="operatorName" />
+		<result column="operatorPhoneNumber" property="operatorPhoneNumber" />
+		 -->
+	</resultMap>
+	
+	<resultMap id="txListMap" type="cfca.safeguard.tx.business.bank.TxUnusualOpencard_Accounts">
+		<result column="fb3zh" property="cardNumber" />
+		<result column="fb3khr" property="accountOpenTime" />
+		<result column="fb3hh" property="accountOpenPlace" />
+	</resultMap>
+
+	<sql id="txAcnt_column">
+		fn20zjlx,fn20zjbh,fn20xm
+	</sql>
+	
+	<sql id="txList_column">
+		fb3zh,fb3khr,fb3hh
+	</sql>
+
+
+	<!-- 获取频繁开户可疑客户信息 -->
+	<select id="getF1001Accnt" resultMap="txAcntMap" parameterType="java.util.Map">
+		select 
+		<include refid="txAcnt_column"></include>
+		from grinfo where fn20khbh=#{khbh}
+	</select>
+	
+	<!-- 获取频繁开户可疑客户卡号信息 -->
+	<select id="getF1001List" resultMap="txListMap" parameterType="java.util.Map">
+		select 
+		<include refid="txList_column"></include>
+		from gracct where fb3khbh=#{khbh}
+	</select>
+	
+
+	<!-- 获取累计开户可疑客户信息 -->
+	<select id="getF1002Accnt" resultMap="txAcntMap" parameterType="java.util.Map">
+		select 
+		<include refid="txAcnt_column"></include>
+		from grinfo where fn20khbh=#{fn20khbh}
+	</select>
+	
+	<!-- 获取累计开户可疑客户卡号信息 -->
+	<select id="getF1002List" resultMap="txListMap" parameterType="java.util.Map">
+		select 
+		<include refid="txList_column"></include>
+		from gracct where fb3khbh=#{fb3khbh}
+	</select>
+
+
+</mapper>   
