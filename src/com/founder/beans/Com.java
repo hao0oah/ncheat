@@ -83,6 +83,10 @@ public class Com {
 	
 	//事件特征码
 	/**
+	 * 取消上报
+	 */
+	public static final String F0000 = "0000";
+	/**
 	 * 频繁开户
 	 */
 	public static final String F1001 = "1001";
