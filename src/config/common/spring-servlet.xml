@@ -8,31 +8,42 @@
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd" default-autowire="byName">
 
 	<!-- 扫描classpath的包下的所有类，该包路径下的类可以不需要配置bean了 -->
-	<context:component-scan base-package="com.founder.service" />
+	<context:component-scan base-package="com.founder.service,com.founder.task" />
     
-	<!-- Configures the @Controller programming model -->
-	<mvc:annotation-driven />
-
 	<context:annotation-config />
 
 	<!--  spring定时任务配置  -->
-	<bean id="upTask" class="com.founder.task.UpTask"></bean>
+	<bean id="task100403" class="com.founder.task.Task100403"></bean>
+	
 	
 	<bean id="task1001" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
-		<property name="targetObject" ref="upTask"></property>
+		<property name="targetObject" ref="task100403"></property>
 		<property name="targetMethod" value="task1001"></property>
 	</bean>
+
+	<bean id="task1002" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="task100403"></property>
+		<property name="targetMethod" value="task1002"></property>
+	</bean>
+
 	
 	<!-- 指定CronTriggerBean的JobDetail和cronExpression -->
 	<bean id="doTask1001" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
 		<property name="jobDetail" ref="task1001"></property>
-		<property name="cronExpression" value="5 * * * * ?"></property>
+		<property name="cronExpression" value="1 * * * * ?"></property>
 	</bean>
+
+	<bean id="doTask1002" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail" ref="task1002"></property>
+		<property name="cronExpression" value="1 * * * * ?"></property>
+	</bean>
+	
 	
 	<bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean" autowire="no">
 		<property name="triggers">
 			<list>
 				<ref bean="doTask1001" />
+				<ref bean="doTask1002" />
 			</list>
 		</property>
 	</bean>
