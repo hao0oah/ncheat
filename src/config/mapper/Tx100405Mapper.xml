@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.founder.database.Tx100405Dao" >
+
+	<resultMap id="tx405grCustMap" type="cfca.safeguard.api.bank.bean.tx.upstream.Tx100405">
+		<result column="cardNumber" property="cardNumber" />
+		<result column="fn20xm" property="accountName" />
+		<result column="fn20zjlx" property="idType" />
+		<result column="fn20zjbh" property="idNumber" />
+		<result column="fn20yddh" property="phoneNumber" />
+		<result column="fn20zzdz" property="address" />
+		<result column="fn20zzyb" property="postCode" />
+		<result column="accountOpenPlace" property="accountOpenPlace" />
+		<!-- 
+		<result column="reportOrgName" property="reportOrgName" />
+		<result column="operatorName" property="operatorName" />
+		<result column="operatorPhoneNumber" property="operatorPhoneNumber" />
+		 -->
+	</resultMap>
+	
+	<resultMap id="tx405grAcntMap" type="cfca.safeguard.tx.business.bank.TxInvolvedAccount_Account">
+		<result column="fb3zh" property="accountNumber" />
+		<result column="accountSerial" property="accountSerial" />
+		<result column="fb3ywlx" property="accountType" />
+		<result column="accountStatus" property="accountStatus" />
+		<result column="fb3biz" property="currency" />
+		<result column="fb3hh" property="cashRemit" />
+	</resultMap>
+
+	<resultMap id="tx405grTransMap" type="cfca.safeguard.tx.business.bank.TxExceptionalEvent_Transaction">
+		<result column="fb3zh" property="transactionType" />
+		<result column="accountSerial" property="borrowingSigns" />
+		<result column="fb3ywlx" property="currency" />
+		<result column="accountStatus" property="transactionAmount" />
+		<result column="fb3biz" property="accountBalance" />
+		<result column="fb3hh" property="transactionTime" />
+		<result column="fb3zh" property="transactionSerial" />
+		<result column="accountSerial" property="opponentName" />
+		<result column="fb3ywlx" property="opponentAccountNumber" />
+		<result column="accountStatus" property="opponentCredentialNumber" />
+		<result column="fb3biz" property="opponentDepositBankID" />
+		<result column="fb3hh" property="transactionRemark" />
+		<result column="fb3zh" property="transactionBranchName" />
+		<result column="accountSerial" property="transactionBranchCode" />
+		<result column="fb3ywlx" property="logNumber" />
+		<result column="accountStatus" property="summonsNumber" />
+		<result column="fb3biz" property="voucherType" />
+		<result column="fb3hh" property="voucherCode" />
+		<result column="fb3hh" property="cashMark" />
+		<result column="fb3hh" property="terminalNumber" />
+		<result column="fb3hh" property="transactionStatus" />
+		<result column="fb3hh" property="transactionAddress" />
+		<result column="fb3hh" property="merchantName" />
+		<result column="fb3hh" property="merchantCode" />
+		<result column="fb3hh" property="ipAddress" />
+		<result column="fb3hh" property="mac" />
+		<result column="fb3hh" property="tellerCode" />
+		<result column="fb3hh" property="remark" />
+	</resultMap>
+	
+	
+	<sql id="tx405grCust_column">
+		fn20zjlx,fn20zjbh,fn20xm
+	</sql>
+	
+	<sql id="tx405grAcnt_column">
+		fb3zh,fb3khr,fb3hh
+	</sql>
+	
+	<sql id="tx405grTrans_column">
+		fb3zh,fb3khr,fb3hh
+	</sql>
+
+
+	<!-- 获取诈骗未遂[收款账户]信息 -->
+	<select id="getF3001grAcnt" resultMap="tx405grCustMap" parameterType="java.util.Map">
+		select 
+		<include refid="tx405grCust_column"></include>
+		from grinfo where fn20khbh=#{khbh}
+	</select>
+	
+	
+	<!-- 获取诈骗未遂主账户信息 -->
+	<select id="getF3001grAcntsList" resultMap="tx405grAcntMap" parameterType="java.util.Map">
+		select 
+		<include refid="tx405grAcnt_column"></include>
+		from gracct where fb3khbh=#{khbh}
+	</select>
+	
+	<!-- 获取涉案账户账号信息 -->
+	<select id="getF3001grAcntList" resultMap="tx405grAcntMap" parameterType="java.util.Map">
+		select 
+		<include refid="tx405grAcnt_column"></include>
+		from gracct where fb3khbh=#{khbh}
+	</select>
+	
+
+	<!-- 获取涉案账户账号交易信息 -->
+	<select id="getF3001grTransList" resultMap="tx405grTransMap" parameterType="java.util.Map">
+		select 
+		<include refid="tx405grTrans_column"></include>
+		from gracctdetail where fb311khzh=#{khzh}
+	</select>
+
+</mapper>   
