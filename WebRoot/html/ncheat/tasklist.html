@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <link rel="stylesheet" type="text/css" href="css/public/jquery-ui.min.css">
+    <link rel="stylesheet" type="text/css" href="css/public/public.css">
+    <link rel="stylesheet" type="text/css" href="css/ncheat/tasklist.css">
+    <link rel="stylesheet" href="css/ncheat/checkbox_style.css">
+    <script src="js/public/jquery.min.js"></script>
+    <script src="js/public/jquery-ui.min.js"></script>
+	<script src="js/public/jquery.bgiframe.js"></script>
+    <script src="js/public/jquery.validate.min.js"></script>
+    <script src="js/public/jquery.form.js"></script>
+    <script src="js/public/jquery.cookie.js"></script>
+    <script src="js/public/public.js"></script>
+    <script src="js/ncheat/tasklist.js"></script>
+    <script src="js/My97DatePicker/WdatePicker.js"></script>
+    <!--[if lt IE 8 ]><script src="js/public/json2.js"></script><![endif]-->
+	<!--[if lt IE 9]><script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+<title>定时任务列表</title>
+</head>
+
+<body>
+	<div class="navBarDiv"></div>
+  <div id="inqueryMain">
+     <h3 class="text-center">定时任务管理</h3>
+     <hr/>
+		<table class="list_table">
+			<thead>
+				<tr>
+					<td width="20px">名称</td>
+					<td width="20px">状态</td>
+					<td width="35px">表达式</td>
+					<td width="50px">描述</td>
+					<td width="20px">同步</td>
+					<td width="50px">springID</td>
+					<td width="40px">方法名</td>
+					<td width="60px">参数</td>
+					<td width="120px">操作 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+					    <label class="switch switch-green">
+					      <input type="checkbox" class="switch-input">
+					      <span class="switch-label" data-on="On" data-off="Off"></span>
+					      <span class="switch-handle"></span>
+					    </label>&nbsp;&nbsp;<span id="runType"></span>
+					</td>
+				</tr>
+			</thead>
+			<tbody id="flowbody"></tbody>
+		</table>
+  </div>
+  
+	<!-- 查询流水对话框 -->
+    <div id="updateDiv" align="center">
+    	<table>
+    		<tr>
+    			<td>cron表达式：</td>
+    			<td><input type="text" id="cron"></td>
+    		</tr>
+    		<tr>
+    			<td>param参数：</td>
+    			<td><input type="text" id="param"></td>
+    		</tr>
+    	</table>
+   	</div>
+   	
+</body>
+</html>
+
+

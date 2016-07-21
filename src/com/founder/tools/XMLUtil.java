@@ -3,6 +3,8 @@ package com.founder.tools;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.util.List;
+import java.util.Map;
+
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.DocumentHelper;
@@ -50,6 +52,11 @@ public class XMLUtil {
 		}
 		
 		return out.toString().trim();
+	}
+	
+	public static Map<?, ?> jsonToMap(String xml){
+		
+		return null;
 	}
 
 }

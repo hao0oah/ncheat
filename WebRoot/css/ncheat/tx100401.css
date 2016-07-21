@@ -1,0 +1,110 @@
+/**
+* tx100401.css
+*/
+
+.readonly_text {
+    background-color: #F0F0F0;
+    width: 240px;
+}
+
+#paymentInputMain{
+	width: 80%;
+	margin-left: auto;
+    margin-right: auto;
+	margin-top: 70px;
+	text-align: center;
+}
+
+#inputFormDiv {
+	width: 85%;
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#queryTable {
+	width: 100%;
+	border-collapse: collapse;
+    border: none;
+    margin: auto;
+}
+
+#queryTable td{
+    text-align: center;
+}
+
+
+#unitcodeDialog,#cantoncodeDialog,#itemDialog {
+	display: none;
+}
+
+#unitcodeDialogTable,#cantoncodeDialogTable,#itemDialogTable {
+	width: 100%;
+	border-collapse: collapse;
+	border: none;
+}
+
+#unitcodeDialogTable td,#cantoncodeDialogTable td,#itemDialogTable td {
+	border: solid #A0A0A0 1px;
+}
+
+
+#listItemTable {
+	width: 100%;
+    border-collapse: collapse;
+    border: none;
+    margin: auto;
+    margin-top: 10px;
+    font-size: 11px;
+    table-layout: fixed;
+}
+
+#listItemTable img{
+	cursor:pointer;
+}
+
+#listItemTable td {
+    border: solid #A0A0A0 1px;
+    text-align: center;
+}
+
+#itemTbody td{
+	overflow: hidden;
+	text-align: center;
+}
+
+#itemTbody input{
+	border: none;
+}
+
+#selectFlowDiv {
+	margin-bottom: 10px;
+	font-size: 11px;
+	font-style: normal;
+	display: none;
+}
+
+
+#buttonDiv {
+	margin-top: 20px;
+}
+
+
+#flowtableDiv {
+	margin-top: 10px;
+	margin-bottom: 10px;
+	display: none;
+}
+
+#flowtable {
+	width: 100%;
+    border-collapse: collapse;
+    border: none;
+    margin: auto;
+}
+
+#flowtable td {
+    border: solid #000000 1px;
+    text-align: center;
+}
+

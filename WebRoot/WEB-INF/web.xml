@@ -4,8 +4,13 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
 	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee 
 	http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd">
-  <display-name>TelecomFraud</display-name>	
+  <display-name>TelecomFraud</display-name>
   
+  	<!-- 配置Spring上下文监听器
+	<listener>
+		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+	</listener>
+	 -->
   	<!-- characterEncoding -->
 	<filter>
 		<filter-name>characterEncodingFilter</filter-name>
@@ -19,6 +24,10 @@
 			<param-value>true</param-value>
 		</init-param>
 	</filter>
+	<filter-mapping>
+		<filter-name>characterEncodingFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
 
 	<!-- log4j的配置 -->
 	<context-param>
@@ -34,6 +43,7 @@
 		<param-value>
 			classpath:config/datasource/datasource.xml
 			classpath:config/common/spring-servlet.xml
+			classpath:config/common/spring-quartz.xml
 		</param-value>
 	</context-param>
 	
@@ -45,6 +55,7 @@
 			<param-value>
 				classpath:config/common/spring-servlet.xml
 				classpath:config/datasource/datasource.xml
+				classpath:config/common/spring-quartz.xml
 			</param-value>
 		</init-param>
 		<load-on-startup>1</load-on-startup>
@@ -54,7 +65,4 @@
 		<url-pattern>/</url-pattern>
 	</servlet-mapping>
 	
-	<welcome-file-list>
-	  <welcome-file>index.jsp</welcome-file>
-	</welcome-file-list>
 </web-app>

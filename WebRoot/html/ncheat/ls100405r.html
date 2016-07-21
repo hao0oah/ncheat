@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link rel="stylesheet" type="text/css" href="css/public/jquery-ui.min.css">
+    <link rel="stylesheet" type="text/css" href="css/public/public.css">
+    <link rel="stylesheet" type="text/css" href="css/ncheat/ls100405.css">
+    <script src="js/public/jquery.min.js"></script>
+    <script src="js/public/jquery-ui.min.js"></script>
+	<script src="js/public/jquery.bgiframe.js"></script>
+    <script src="js/public/jquery.validate.min.js"></script>
+    <script src="js/public/jquery.form.js"></script>
+    <script src="js/public/jquery.cookie.js"></script>
+    <script src="js/public/public.js"></script>
+    <script src="js/ncheat/ls100405.js"></script>
+    <script src="js/My97DatePicker/WdatePicker.js"></script>
+    <!--[if lt IE 8 ]><script src="js/public/json2.js"></script><![endif]-->
+<title>可疑事件筛选</title>
+</head>
+<body>
+	<div class="navBarDiv"></div>
+    <div id="inqueryMain" class="mainDiv">
+        <div id="queryDiv">
+            <h3 class="text-center">可疑事件筛选列表</h3>
+            <hr/>
+            <div id="queryFormDiv" align="center">
+                <form id="queryForm">
+                    <table>
+                        <tr> 
+                            <td>
+                                <label for="transDate">操作日期:</label>
+                            </td>
+                            <td>
+                                <input type="text" class="founder_Text ui-corner-all" id="transDate" name="transDate" onclick="WdatePicker();" placeholder="请选择操作日期"/>
+                            </td>
+                            <td>
+                                <label for="transType">事件类型:</label>
+                            </td>
+                            <td>
+                            	<select id="transType" name="transType">
+                            		<option value="">---请选择---</option>
+                            		<option value="3006">分散入集中出</option>
+                            		<option value="3007">集中入分散出</option>
+                            		<option value="3008">连续多笔交易</option>
+                            	</select>
+                            </td>
+                             <td>
+                                <label for="bankid">机构号:</label>
+                            </td>
+                            <td>
+                                <input type="text" class="founder_Text ui-corner-all" id="bankid" name="bankid" />
+                            </td>
+                        </tr>
+                        <tr align="center">
+                        	<td colspan="6" align="center">
+                                <input type="button" id="querySubmit" value="查询" />
+
+                                <input type="button" id="queryReset" value="取消" />
+
+                                <input type="button" id="upall" value="上报" />
+                            </td>
+                        </tr>
+                        <tr>
+                        	<td colspan="6" align="center">
+                        		<div id="wait" style="display: none;">
+                        			<img src="image/wait.gif"  width="16" height="16">
+                        		</div>
+								<span id="queryInfo" style="color:red"></span>
+							</td>
+						</tr>
+                    </table>
+                </form>
+            </div>
+        </div>
+        
+        <!--查询结果-->
+        <div id="queryResult">
+            <div id="resultTableDiv">
+                <table id="resultTable">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+							<th id="accountName">账户名</th>
+							<th id="accountNumber">账号</th>
+                            <th id="cardNumber">卡号</th>
+                            <th id="payCount">支出总笔数</th>
+                            <th id="payAmount">支出总金额</th>
+                            <th id="peyCount">收入总笔数</th>
+                            <th id="peyAmount">收入总金额</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody id="resultList"></tbody>
+                </table>
+            </div>
+            <div class="text-center">
+                <strong>总共<span id="totalPage">0</span>页</strong>
+                <strong>当前第<span id="curentPage">0</span>页</strong>
+                <strong>每页 10 条</strong>
+                <input type="button" id="fristPage" class="pageBtn" value="首页">
+                <input type="button" id="previous" class="pageBtn" value="上一页">
+                <input type="button" id="next" class="pageBtn" value="下一页">
+                <input type="button" id="lastPage" class="pageBtn" value="尾页">
+            </div>
+        </div>
+    </div>
+   	
+   	<!-- 查询交易明细对话框 -->
+    <div id="detailDialog" align="center">
+		<table id="flowtable">
+			<thead>
+				<tr>
+				<td width='10px'>#</td>
+              	<td width='70px'>交易流水</td>
+				<td width='220px'>客户账号</td>
+				<td width='180px'>卡号</td>
+				<td width='110px'>记账日期</td>
+              	<td width='80px'>交易类型</td>
+              	<td width='80px'>交易金额</td>
+              	<td width='180px'>对方账户名</td>
+              	<td width='220px'>对方账号</td>
+              	<td width='180px'>对方行名</td>
+				</tr>
+			</thead>
+			<tbody id="flowbody"></tbody>
+		</table>
+   	</div>
+   	
+</body>
+</html>
+
+

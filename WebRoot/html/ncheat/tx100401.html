@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <link rel="stylesheet" type="text/css" href="css/public/jquery-ui.min.css">
+    <link rel="stylesheet" type="text/css" href="css/public/public.css">
+    <link rel="stylesheet" type="text/css" href="css/ncheat/tx100401.css">
+    <script src="js/public/jquery.min.js"></script>
+    <script src="js/public/jquery-ui.min.js"></script>
+	<script src="js/public/jquery.bgiframe.js"></script>
+    <script src="js/public/jquery.validate.min.js"></script>
+    <script src="js/public/jquery.form.js"></script>
+    <script src="js/public/jquery.cookie.js"></script>
+    <script src="js/public/public.js"></script>
+    <script src="js/ncheat/tx100401.js"></script>
+    <script src="js/My97DatePicker/WdatePicker.js"></script>
+    <!--[if lt IE 8 ]><script src="js/public/json2.js"></script><![endif]-->
+
+    <title>诈骗案件举报</title>
+</head>
+
+<body>
+
+   <div class="navBarDiv"></div>
+    <div id="paymentInputMain" class="mainDiv">
+        <div id="inputDiv">
+            <h3 class="text-center">诈骗案件举报</h3>
+            <hr/>
+            <div id="inputFormDiv">
+            	<form id="applyInputForm">
+                	<table id="queryTable">
+                		<tr>
+                			<td style="text-align: right" width="115px">案件举报类型：</td>
+                			<td style="text-align: left">
+								<select id="apptype" name="applicationType">
+									<option value="01">报案</option>
+									<option value="02">止付后补流程</option>
+								</select>
+                			</td>
+                		</tr>
+                		<tr>
+                			<td style="text-align: right" width="115px">举报人姓名：</td>
+                			<td style="text-align: left">
+                				<input id="vname" name="victimName" type="text" class="founder_Text  ui-corner-all ">
+                			</td>
+                			<td style="text-align: right" width="115px">举报人电话：</td>
+                			<td style="text-align: left">
+                				<input id="vphone" name="victimPhoneNumber" type="text" class="founder_Text  ui-corner-all ">
+                			</td>
+                		</tr>
+                		<tr>
+                			<td style="text-align: right" width="115px">证件类型：</td>
+                			<td style="text-align: left">
+                				<select id="victimIDType" name="victimIDType"></select>
+                			</td>
+                			<td style="text-align: right" width="115px">证件号码：</td>
+                			<td style="text-align: left">
+                				<input id="idno" name="victimIDNumber" type="text" class="founder_Text  ui-corner-all ">
+                			</td>
+                		</tr>
+                		<tr>
+                			<td style="text-align: right" width="115px">事件描述：</td>
+                			<td style="text-align: left" colspan="3">
+								<textarea name="accidentDescription" rows="5" cols="80" class="founder_Text  ui-corner-all "></textarea>
+                			</td>
+                		</tr>
+                	</table>
+				</form>
+                <table id="listItemTable">
+                	<caption>诈骗交易记录</caption>
+                	<thead>
+                		<tr>
+                     	<td width='70px'>交易流水号</td>
+                     	<td width='100px'>交易日期</td>
+                     	<td width='50px'>交易类型</td>
+                     	<td width='60px'>交易金额</td>
+                     	<td width='55px'>转出账户名</td>
+                     	<td width='120px'>转出账号</td>
+                     	<td width='100px'>转入银行</td>
+                     	<td width='55px'>转入账户名</td>
+                     	<td width='120px'>转入账号</td>
+                     	<td width='20px'><img alt="增加" src="image/add.png" onclick="addRow();" title="增加"/></td>
+                     </tr>
+                	</thead>
+                    <tbody id="itemTbody">
+                    </tbody>
+                </table>
+            </div>
+            
+            <div id="buttonDiv" class="text-center">
+                <input type="button" id="resetBtn" value="取&nbsp;&nbsp;消" />
+                <input type="button" id="applyBtn" value="提&nbsp;&nbsp;交" />
+                <div class="text-center" style="margin-top: 5px;">
+					<img id="wait" style="display: none;" src="image/wait.gif"  width="16" height="16">
+					<span id="queryInfo" style="color:red"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    
+    <!-- 查询流水对话框 -->
+    <div id="selectFlowDiv" align="center">
+    	
+   		<div id="queryFlowDiv">
+   			流水号：<input id="stransflow" type="text" style="width:110px" class="founder_Text  ui-corner-all" >
+   			交易日期：<input id="stransdate" type="text" style="width:80px" class="founder_Text  ui-corner-all" placeholder="请选择日期" onclick="WdatePicker();">
+   			付款账号：<input id="spayno" type="text" style="width:135px" class="founder_Text  ui-corner-all" >
+   			收款账号：<input id="speyno" type="text" style="width:135px" class="founder_Text  ui-corner-all" >
+   			交易金额：<input id="speyno" type="text" style="width:50px" class="founder_Text  ui-corner-all" >
+   			<input type="button" id="searchFlow" value="查&nbsp;询" >
+   		</div>
+   		
+   		<div id="flowtableDiv">
+   			<table id="flowtable">
+   				<thead>
+   					<tr>
+   					<td width='35px'>选择</td>
+   					<td width='85px'>交易流水号</td>
+                   	<td width='105px'>交易时间</td>
+                   	<td width='50px'>交易类型</td>
+                   	<td width='60px'>交易金额</td>
+                   	<td width='65px'>转出账户名</td>
+                   	<td width='100px'>转出账号</td>
+                   	<td width='65px'>转入账户名</td>
+                   	<td width='100px'>转入账号</td>
+   					</tr>
+   				</thead>
+   				<tbody id="flowbody"></tbody>
+   			</table>
+   		</div>
+   		
+   		<div id="pageDiv" class="text-center">
+               <strong>总共<span id="totalPage">0</span>页</strong>
+               <strong>当前第<span id="curentPage">0</span>页</strong>
+               <strong>每页 5 条</strong>
+               <input type="button" id="fristPage" class="pageBtn" value="首页">
+               <input type="button" id="previous" class="pageBtn" value="上一页">
+               <input type="button" id="next" class="pageBtn" value="下一页">
+               <input type="button" id="lastPage" class="pageBtn" value="尾页">
+       	</div>
+      	<div id="wait2" style="display: none;margin-top: 5px;">
+			<img src="image/wait.gif"  width="16" height="16">
+			<font color="red">正在查询,请稍候...</font>
+		</div>
+   		
+   	</div>
+
+    <!--结果页面-->
+    <div id="inputResultDiv" style="display: none">
+        <div id="inputProcessBar">
+            <div id="processBar"></div>
+        </div>
+
+        <div id="inputFail">
+            <h4 class="text-center">交易失败</h4>
+            <hr/>
+            <div class="ui-widget">
+                <div class="ui-state-error ui-corner-all">
+                    <p><span class="ui-icon ui-icon-alert errorInfo"></span>
+                        <strong>失败原因:</strong><span id="failReason"></span></p>
+                </div>              
+            </div>
+        </div>
+    </div>
+</body>
+
+<!-- 
+<tr>
+<td colspan="4" align="center">
+	<div id="wait" style="display: none;">
+		<font color="red">正在处理数据,请稍候...</font>
+		<img src="image/wait.gif"  width="16" height="16">
+	</div>
+</td>
+</tr>
+ -->
+
+</html>

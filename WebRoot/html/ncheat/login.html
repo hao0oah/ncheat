@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta http-equiv="pragma" content="no-cache">
+	<meta http-equiv="cache-control" content="no-cache">
+	<meta http-equiv="expires" content="0">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link rel="stylesheet" type="text/css" href="css/public/jquery-ui.min.css">
+    <link rel="stylesheet" type="text/css" href="css/public/public.css">
+    <link rel="stylesheet" type="text/css" href="css/ncheat/login.css">
+    <script src="js/public/jquery.min.js"></script>
+    <script src="js/public/jquery-ui.min.js"></script>
+	<script src="js/public/jquery.bgiframe.js"></script>
+    <script src="js/public/jquery.validate.min.js"></script>
+    <script src="js/public/jquery.form.js"></script>
+    <script src="js/public/jquery.cookie.js"></script>
+    <script src="js/public/public.js"></script>
+    <script src="js/ncheat/login.js"></script>
+    <!--[if lt IE 8 ]><script src="js/public/json2.js"></script><![endif]-->
+	<title>保定银行电信诈骗管理</title>
+</head>
+
+<body>
+    <div>
+        <div id="imgDiv">
+            <img src="image/logo.png">
+        </div>
+        <div id="loginDiv">
+            <p id="loginTitle">电信诈骗管理系统</p>
+            <div id="loginTabs">
+                <ul>
+                    <li><a href="#passwordTab">密码登录</a></li>
+                </ul>
+                <div id="passwordTab">
+                    <div class="loginFromDiv">
+                        <form id="passwordLoginForm" action="login" method="post">
+                            <table>
+                                <tr>
+                                    <td>
+                                        <label for="passwordUserName">柜员号:</label>
+                                    </td>
+                                    <td>
+                                        <input class="founder_Text ui-widget-content ui-corner-all" type="text" 
+                                        onkeypress="return handleEnter(this, event)" name="userName" id="passwordUserName" placeholder="请输入柜员号" />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <label for="passwordPw">密&nbsp;&nbsp;&nbsp;码:</label>
+                                    </td>
+                                    <td>
+                                        <input class="founder_Text ui-widget-content ui-corner-all" type="password"  
+                                        onkeypress="return handleEnter(this, event)"
+                                        name="password" id="passwordPw" placeholder="请输入密码" />
+                                    </td>
+                                </tr>
+                            </table>
+                            <div id="passwordLoginInfo" class="text-center"></div>
+                        </form>
+                    </div>
+                    <div class="text-center">
+                        <input type="button" id="passwordLoginSubmit" value="登&nbsp;&nbsp;录" />
+                        <input type="button" id="passwordLoginReset" value="重&nbsp;&nbsp;置" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>

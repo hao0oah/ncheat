@@ -1,0 +1,37 @@
+/**
+* login.css
+*/
+
+body {
+	background-image: none;
+}
+
+#loginTitle {
+    margin-left: 55%;
+}
+
+#imgDiv {
+    margin-top: 5%;
+    margin-left: 35%;
+}
+
+#loginDiv {
+    width: 50%;
+    margin-left: 30%;
+}
+
+#loginTabs {
+    width: 70%;
+    font-size: 1.1em;
+}
+
+.loginFromDiv {
+    width: 80%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#passwordLoginInfo {
+    color: red;
+}
+

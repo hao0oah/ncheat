@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link rel="stylesheet" type="text/css" href="css/public/jquery-ui.min.css">
+    <link rel="stylesheet" type="text/css" href="css/public/public.css">
+    <script src="js/public/jquery.min.js"></script>
+    <script src="js/public/jquery-ui.min.js"></script>
+    <script src="js/public/jquery.validate.min.js"></script>
+    <script src="js/public/jquery.form.js"></script>
+    <script src="js/public/jquery.cookie.js"></script>
+    <script src="js/public/public.js"></script>
+    <script src="js/ncheat/trans01.js"></script>
+    <script src="js/My97DatePicker/WdatePicker.js"></script>
+    <!--[if lt IE 8 ]><script src="js/public/json2.js"></script><![endif]-->
+<title>导出所有交易</title>
+</head>
+<body>
+
+    <div id="inqueryMain" class="mainDiv">
+        <div id="queryDiv">
+            <h4 class="text-center">导出账户所有交易</h4>
+            <hr/>
+            <div id="queryFormDiv" align="center">
+                <form id="queryForm">
+                    <table>
+                        <tr> 
+                        	<td>
+                                <label for="type">账户类型:</label>
+                            </td>
+                        	<td>
+                            	<select id="type" name="type">
+                            		<option value="0">个人</option>
+                            		<option value="1">对公</option>
+                            	</select>
+                            </td>
+                            <td>
+                                <label for="account">账号:</label>
+                            </td>
+                            <td>
+                                <input id="account" name="account" type="text" class="founder_Text  ui-corner-all"/>
+                            </td>
+                        </tr>
+                        <tr>
+                        	<td>
+                        		<label for="start">开始日期:</label>
+                        	</td>
+                        	<td>
+                        		<input id="start" name="start" type="text" class="founder_Text  ui-corner-all"  onclick="WdatePicker();"/>
+                        	</td>
+                        	<td>
+                        		<label for="end">结束日期:</label>
+                        	</td>
+                        	<td>
+                        		<input id="end" name="end" type="text" class="founder_Text  ui-corner-all"  onclick="WdatePicker();"/>
+                        	</td>
+                        </tr>
+                        <tr>
+                        	<td colspan="2" align="right">
+                                <input type="button" id="querySubmit" value="导出" />
+                            </td>
+                            <td colspan="2">
+                                <input type="button" id="queryReset" value="重&nbsp;&nbsp;置" />
+                            </td>
+                        </tr>
+                        <tr><td colspan="4" align="center">
+                        <div id="wait" style="display: none;"><img src="image/wait.gif"  width="16" height="16"></div>
+						<span id="queryInfo" style="color:red"></span></td></tr>
+                    </table>
+                </form>
+            </div>
+        </div>
+   	</div>
+</body>
+</html>
+
+

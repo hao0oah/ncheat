@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link rel="stylesheet" type="text/css" href="css/public/jquery-ui.min.css">
+    <link rel="stylesheet" type="text/css" href="css/public/public.css">
+    <link rel="stylesheet" type="text/css" href="css/ncheat/chgpwd.css">
+    <script src="js/public/jquery.min.js"></script>
+    <script src="js/public/jquery-ui.min.js"></script>
+	<script src="js/public/jquery.bgiframe.js"></script>
+    <script src="js/public/jquery.validate.min.js"></script>
+    <script src="js/public/jquery.form.js"></script>
+    <script src="js/public/jquery.cookie.js"></script>
+    <script src="js/public/public.js"></script>
+    <script src="js/ncheat/chgpwd.js"></script>
+    <!--[if lt IE 8 ]><script src="js/public/json2.js"></script><![endif]-->
+<title>修改密码</title>
+</head>
+<body>
+	<div class="navBarDiv"></div>
+    <div id="inqueryMain" class="mainDiv">
+        <div id="queryDiv">
+            <h3 class="text-center">修改密码</h3>
+            <hr/>
+            <div id="queryFormDiv" align="center">
+                <form id="queryForm">
+                    <table>
+                        <tr> 
+                            <td>
+                                <label for="password0">原密码:</label>
+                            </td>
+                            <td>
+                                <input type="password" class="founder_Text ui-corner-all" id="password0" name="password0"/>
+                            </td>
+                            <td>
+                                <label for="password1">新密码:</label>
+                            </td>
+                            <td>
+                                <input type="password" class="founder_Text ui-corner-all" id="password1" name="password1"/>
+                            </td>
+                        </tr>
+                        <tr>
+                        	<td colspan="2" align="right">
+                                <input type="button" id="querySubmit" value="提交" />
+                            </td>
+                            <td colspan="2">
+                                <input type="button" id="queryReset" value="取&nbsp;&nbsp;消" />
+                            </td>
+                        </tr>
+                        <tr>
+                        	<td colspan="4" align="center">
+                        		<div id="wait" style="display: none;">
+                        			<img src="image/wait.gif"  width="16" height="16">
+                        		</div>
+								<span id="queryInfo" style="color:red"></span>
+							</td>
+						</tr>
+                    </table>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+
+

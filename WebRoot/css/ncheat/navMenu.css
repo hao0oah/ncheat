@@ -1,0 +1,154 @@
+/**
+* navMenu.css
+*/
+
+body,
+h2,
+h4 {
+    margin: 0;
+    padding: 0;
+}
+
+li {
+    width: 200px;
+}
+
+#Separate {
+    position: fixed;
+    top: 40px;
+    width: 100%;
+    background-color: gray;
+}
+
+#navBar {
+    position: fixed;
+    top: 0px;
+    width: 100%;
+    height: 40px;
+    background-color: #48525E;
+}
+
+#navBar div {
+    /*position: fixed;*/
+    height: 40px;
+    /*font-family: "Microsoft Yahei";*/
+}
+
+#navTitle {
+    left: 0px;
+    width: 260px;
+    text-align: center;
+    font-size: 14px;
+    float: left;
+    margin-left: 10px;
+    margin-top: 5px;
+}
+
+#navTitle a {
+    color: #FFF;
+    display: block;
+    width: 100%;
+    height: 100%;
+    line-height: 40px;
+    text-decoration: none;
+}
+
+#userInfo {
+    color: #FFF;
+    height: 100%;
+    line-height: 40px;
+    /*width: %;*/
+    float: right;
+    margin-right: 10px;
+}
+
+
+/*.ui-menu {
+    width: 200px;
+}*/
+
+#navMenu {
+    position: fixed;
+    top: 60px;
+    left: 10px;
+    border-right: solid 2px rgb(192, 192, 192);
+}
+
+.title {
+    width: 200px;
+    background-color: rgb(192, 192, 192);
+    vertical-align: middle;
+    position: relative;
+    margin: 4px 0 4px 0;
+}
+
+.title a,
+.title a:link,
+.title a hover {
+    color: #3F3D3D;
+    display: block;
+    text-decoration: none;
+    background-repeat: no-repeat;
+    background-position: center top;
+    cursor: pointer;
+}
+
+.title a:hover {
+    color: #7E7C7C;
+}
+
+.list {
+    color: #002280;
+    width: 200px;
+    border: 0px solid #C1C1C1;
+    text-align: center;
+    padding: 0px 0px;
+    overflow: hidden;
+    display: none;
+}
+
+html>body .list {
+    width: 200px;
+}
+
+.list ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    padding-left: 0px;
+}
+
+.list li {
+    margin: 0 0 1px;
+    0;
+    padding-left: 0px;
+    width: 200px;
+}
+
+.list a {
+    color: #8E8E8E;
+    text-decoration: none;
+    display: block;
+    background-color: #E7E5E5;
+    /*width: 135px;*/
+    /*height: 19px;*/
+    vertical-align: middle;
+    /*line-height: 19px;*/
+}
+
+.list a:link {
+    color: #8E8E8E;
+}
+
+.list a:hover {
+    color: #B50000;
+    background-color: #FDEDDF;
+}
+
+.list a:active {
+    color: #8E8E8E;
+}
+
+.menuClicked{
+	color: red;
+}

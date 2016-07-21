@@ -1,104 +1,88 @@
 package com.founder.service;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import javax.annotation.Resource;
+
+import org.apache.log4j.Logger;
+import org.springframework.stereotype.Service;
+
+import com.founder.beans.Com;
+import com.founder.database.Tx100404Dao;
+import com.founder.tools.XMLUtil;
 
 import cfca.safeguard.Result;
 import cfca.safeguard.api.bank.Constants;
 import cfca.safeguard.api.bank.bean.tx.upstream.Tx100404;
 import cfca.safeguard.api.bank.util.ResultUtil;
-import cfca.safeguard.tx.Transaction;
 import cfca.safeguard.tx.business.bank.TxInvolvedAccount_Account;
 
 /**
  * 可疑名单上报-涉案账户
  * @date 2016-07-19
  */
+@Service("tx100404")
 public class Tx100404Service extends BaseService{
+	public final Logger log = Logger.getLogger(this.getClass());
+
+	@Resource
+	private Tx100404Dao tx100404Dao;
 	
     public Tx100404Service() throws Exception {
 		super();
 	}
 
 	@Override
-	public void execute(String featrue) throws Exception {
-        String transSerialNumber = "dmbank140040420160418";
+	public void execute(String featrue,Map<String,?> param) throws Exception {
+        String transSerialNumber = Com.BANK_CODE+Com.TRUST_CODE+Com.APP_ID+Com.getRandomNo(28-2);
         String fromTGOrganizationId="";
 
-        Tx100404 tx100404 = new Tx100404();
+        Tx100404 tx100404 = null;
+
+        if(Com.F0000.equals(featrue)){
+        	//TODO:取消上传涉案账户
+        	return;
+        } else if(Com.F2001.equals(featrue)){
+        	tx100404 = tx100404Dao.getF2001grCust(param);
+        	if(tx100404 == null){
+        		 log.info("[没有需要上报的涉案账户]");
+        		 return;
+        	}
+        	
+        	List<TxInvolvedAccount_Account> accountList = tx100404Dao.getF2001grAcntList(param);
+        	for (TxInvolvedAccount_Account account : accountList) {
+        		Map<String,String> map = new HashMap<String, String>();
+        		map.put("khzh", account.getAccountNumber());
+				account.setTransactionList(tx100404Dao.getF2001grTransList(param));
+			}
+        	tx100404.setAccountList(accountList);
+        }
+        
         tx100404.setTransSerialNumber(transSerialNumber);
-        tx100404.setApplicationID("111");
-        tx100404.setFeatureCode("1001");
-        tx100404.setBankID("13421");
-        tx100404.setCardNumber("13421");
-        tx100404.setAccountName("test");
-        tx100404.setIdType("44");
-        tx100404.setIdNumber("4444");
-        tx100404.setPhoneNumber("6204321321");
-        tx100404.setAddress("cfca");
-        tx100404.setPostCode("102400");
-        tx100404.setAccountOpenPlace("bj");
-
-        List<TxInvolvedAccount_Account> accountList = new ArrayList<TxInvolvedAccount_Account>();
-        TxInvolvedAccount_Account txInvolvedAccount_Account = new TxInvolvedAccount_Account();
-        txInvolvedAccount_Account.setAccountNumber("1231321");
-        txInvolvedAccount_Account.setAccountType("test");
-        txInvolvedAccount_Account.setAccountStatus("1");
-        txInvolvedAccount_Account.setCurrency("CNY");
-        txInvolvedAccount_Account.setCashRemit("11");
-
-        List<Transaction> transactionList = new ArrayList<Transaction>();
-
-        Transaction transaction = new Transaction();
-        transaction.setTransactionType("01");
-        transaction.setBorrowingSigns("daf");
-        transaction.setCurrency("RMB");
-        transaction.setTransactionAmount("dsaf");
-        transaction.setAccountBalance("20");
-        transaction.setTransactionTime("20160101000000");
-        transaction.setTransactionSerial("113213");
-        transaction.setOpponentName("cfca");
-        transaction.setOpponentAccountNumber("123456");
-        transaction.setOpponentCredentialNumber("123456");
-        transaction.setOpponentDepositBankID("adsf");
-        transaction.setTransactionRemark("test");
-        transaction.setTransactionBranchName("cfca");
-        transaction.setTransactionBranchCode("fda");
-        transaction.setLogNumber("123456");
-        transaction.setSummonsNumber("123456");
-        transaction.setVoucherType("01");
-        transaction.setVoucherCode("adf");
-        transaction.setCashMark("fdsa");
-        transaction.setTerminalNumber("123456");
-        transaction.setTransactionStatus("asdf");
-        transaction.setTransactionAddress("fda");
-        transaction.setMerchantName("cfca");
-        transaction.setMerchantCode("asdf");
-        transaction.setIpAddress("adsf");
-        transaction.setMac("adsf");
-        transaction.setTellerCode("adsf");
-        transaction.setRemark("test");
-
-        transactionList.add(transaction);
-        txInvolvedAccount_Account.setTransactionList(transactionList);
-
-        accountList.add(txInvolvedAccount_Account);
-        tx100404.setAccountList(accountList);
-        tx100404.setReportOrgName("cfca");
-        tx100404.setOperatorName("test");
-        tx100404.setOperatorPhoneNumber("123456");
+        tx100404.setApplicationID(Com.N0404+Com.getRandomNo(32));
+        tx100404.setFeatureCode(featrue);
+        tx100404.setBankID(Com.BANK_CODE);
 
         String requestXML = sgBusiness.tx100404(tx100404,fromTGOrganizationId);
-        System.out.println(requestXML);
+        log.info("发送报文：\n"+XMLUtil.formatXml(requestXML));
         String responseXML = sgBusiness.sendPackagedRequestXML(requestXML);
+        log.info("返回报文：\n"+XMLUtil.formatXml(responseXML));
         Result result = ResultUtil.chageXMLToResult(responseXML);
 
         if (Constants.SUCCESS_CODE_VALUE.equals(result.getCode())) {
-            System.out.println("可疑名单上报-涉案账户成功");
+        	log.info("[可疑名单上报-涉案账户成功]");
         } else {
-            System.out.println(result.getResponseXML());
-            System.out.println("可疑名单上报-涉案账户失败,错误码=" + result.getCode() + ",错误信息=" + result.getDescription());
+            log.info("[可疑名单上报-涉案账户失败,错误码=" + result.getCode() + ",错误信息=" + result.getDescription()+"]");
         }
+	}
+	
+	/**
+	 * 获取所有涉案账户
+	 */
+	public List<String> getgrF2001AllCust(Map<String,?> param){
+		return tx100404Dao.getF2001grCusts(param);
 	}
 
 }

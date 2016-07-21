@@ -1,0 +1,287 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.founder.database2.Tx100405Dao2" >
+
+<!-- 	<resultMap id="tx405grCustMap" type="cfca.safeguard.tx.business.bank.TxExceptionalEvent_Accounts">
+		<result column="AccountName" property="AccountName" />
+		<result column="cardNumber" property="cardNumber" />
+		<result column="remark" property="remark" />
+	</resultMap>
+	
+	<resultMap id="tx405grAcntMap" type="cfca.safeguard.tx.business.bank.TxExceptionalEvent_Account">
+		<result column="accountNumber" property="accountNumber" />
+		<result column="accountSerial" property="accountSerial" />
+		<result column="accountType" property="accountType" />
+		<result column="accountStatus" property="accountStatus" />
+		<result column="currency" property="currency" />
+		<result column="cashRemit" property="cashRemit" />
+	</resultMap> -->
+
+	
+	<resultMap id="tx405grTransMap" type="cfca.safeguard.tx.business.bank.TxExceptionalEvent_Transaction">
+		<result column="fb311jym" property="transactionType" />
+		<result column="fb311jdf" property="borrowingSigns" />
+		<result column="fb311biz" property="currency" />
+		<result column="fb311fse" property="transactionAmount" />
+		<result column="fb311ye" property="accountBalance" />
+		<result column="datetime" property="transactionTime" />
+		<result column="fb311jylsh" property="transactionSerial" />
+		<result column="fb311dfmc" property="opponentName" />
+		<result column="fb311dfzh" property="opponentAccountNumber" />
+		<!-- <result column="accountStatus" property="opponentCredentialNumber" /> -->
+		<result column="fb311dfhm" property="opponentDepositBankID" />
+		<result column="fb311jybz" property="transactionRemark" />
+		<result column="fb311jyhm" property="transactionBranchName" />
+		<result column="fb311fsfhh" property="transactionBranchCode" />
+		<!-- <result column="fb3ywlx" property="logNumber" />
+		<result column="accountStatus" property="summonsNumber" /> -->
+		<result column="fb311pzl" property="voucherType" />
+		<result column="fb311pzh" property="voucherCode" />
+		<result column="cashMark" property="cashMark" />
+		<result column="fb311jyjqh" property="terminalNumber" />
+		<result column="fb311bz" property="transactionStatus" />
+		<!-- <result column="fb3hh" property="transactionAddress" />
+		<result column="fb3hh" property="merchantName" /> -->
+		<result column="fb311shbh" property="merchantCode" />
+		<!-- <result column="fb3hh" property="ipAddress" />
+		<result column="fb3hh" property="mac" /> -->
+		<result column="fb311jzy" property="tellerCode" />
+		<!-- <result column="fb3hh" property="remark" /> -->
+	</resultMap>
+
+	<sql id="transaction_column">
+		trim(fb311jym) fb311jym,(fb311jdf-1) fb311jdf,decode(fb311biz,'1','CNY','OTH') fb311biz,fb311fse,fb311ye,to_char(fb311jzr,'%Y%m%d')||substr(fb311jysj,0,6) datetime,fb311jylsh,
+		trim(nvl(fb311dfmc,'-')) fb311dfmc,trim(fb311dfzh) fb311dfzh,trim(nvl(fbb311dfhm,'-')) fb311dfhm,trim(fb311jybz) fb311jybz,trim(fc2bhhm) fb311jyhm,fb311fsfhh,fb311pzl,trim(fb311pzh) fb311pzh,'00' cashMark,
+		fb311jyjqh,decode(fb311bz,'00000000','00','01') fb311bz,trim(fb311shbh) fb311shbh,fb311jzy
+	</sql>
+
+	<!-- 获取客户信息 
+	<select id="getF405grCust" resultMap="tx405grCustMap" parameterType="java.util.Map">
+		select trim(fn20xm) AccountName,trim(fn13khzh) cardNumber
+		from gracct
+		left join grinfo on fn20khbh=fb3khbh
+		left join relevantAcct on fn13nbzh=fb3zh
+		where fn13khzh=#{khzh}
+	</select>-->
+	
+
+	<!-- 获取账号信息 
+	<select id="getF405grAcnt" resultMap="tx405grAcntMap" parameterType="java.util.Map">
+		select trim(fn13zh) accountNumber,fn13xh accountSerial,fb3zl accountType,decode(fb3bz[1,1],'0','正常','1','冻结','2','冻结','4','销户','5','变更科目') accountStatus,decode(fb3biz,'1','CNY') currency,'0' cashRemit
+		from gracct left join relevantAcct on fn13nbzh=fb3zh
+		where fn13khzh=#{khzh}
+	</select>-->
+	
+	
+	
+	<!-- 根据提供的条件，查询交易流水信息 -->
+	<select id="listgrTransactions" resultMap="tx405grTransMap" parameterType="java.util.Map">
+		select skip #{begin} first #{limit} 
+		<include refid="transaction_column"></include>
+		from sb311
+		left join bc2 on fb311fsfhh=fc2hh
+		left join v_acctname on fb311zh=acctno
+		where 1==1
+		<![CDATA[	and fb311dfzh<>'*' and fb311jybz not like '%手续费%'	]]>
+		<trim suffixOverrides=",">
+			<if test="transflow != null and transflow != ''">
+				and fb311jylsh=#{transflow}
+			</if>
+			<if test="transdate != null and transdate != ''">
+				and fb311jzr=#{transdate}
+			</if>
+			<if test="amount != null and amount != ''">
+				and fb311fse=#{amount}
+			</if>
+			<if test="payno != null and payno != ''">
+				and fb311khzh=#{payno}
+			</if>
+			<if test="peyno != null and peyno != ''">
+				and fb311dfzh=#{peyno}
+			</if>
+		</trim>
+		order by fb311jylsh desc
+	</select>
+
+	<!-- 根据提供的条件，查询交易流水信息 -->
+	<select id="getgrTransactionsCount" resultType="integer" parameterType="java.util.Map">
+		select count(*)
+		from sb311
+		left join bc2 on fb311fsfhh=fc2hh
+		left join v_acctname on fb311zh=acctno
+		where 1==1
+		<![CDATA[	and fb311dfzh<>'*' and fb311jybz not like '%手续费%'	]]>
+		<trim suffixOverrides=",">
+			<if test="transflow != null and transflow != ''">
+				and fb311jylsh=#{transflow}
+			</if>
+			<if test="transdate != null and transdate != ''">
+				and fb311jzr=#{transdate}
+			</if>
+			<if test="amount != null and amount != ''">
+				and fb311fse=#{amount}
+			</if>
+			<if test="payno != null and payno != ''">
+				and fb311khzh=#{payno}
+			</if>
+			<if test="peyno != null and peyno != ''">
+				and fb311dfzh=#{peyno}
+			</if>
+		</trim>
+	</select>
+
+
+	<!-- 根据流水号，查询交易流水信息 -->
+	<select id="getTransaction" resultMap="tx405grTransMap" parameterType="java.util.Map">
+		select limit 1
+		<include refid="transaction_column"></include>
+		from sb311
+		left join bc2 on fb311fsfhh=fc2hh
+		left join v_acctname on fb311zh=acctno
+		<trim prefix="where" suffixOverrides="and | or">
+			<if test="transflow != null and transflow != ''">
+				fb311jylsh=#{transflow}
+			</if>
+			<if test="transdate != null and transdate != ''">
+				and fb311jzr=#{transdate}
+			</if>
+			<if test="amount != null and amount != ''">
+				and fb311fse=#{amount}
+			</if>
+			<if test="payno != null and payno != ''">
+				and fb311khzh=#{payno}
+			</if>
+			<if test="peyno != null and peyno != ''">
+				and fb311dfzh=#{peyno}
+			</if>
+		</trim>
+		<![CDATA[	and fb311dfzh<>'*' and fb311jybz not like '%手续费%'	]]>
+	</select>
+	
+	
+	<!-- 根据提供的条件，查询交易流水信息 -->
+	<select id="getgrTransactions" resultMap="tx405grTransMap" parameterType="java.util.Map">
+		select 
+		<include refid="transaction_column"></include>
+		from sb311
+		left join bc2 on fb311fsfhh=fc2hh
+		left join v_acctname on fb311zh=acctno
+		where fb311khzh=#{khzh}
+		<![CDATA[	and fb311dfzh<>'*' and fb311jybz not like '%手续费%'	]]>
+		<trim suffixOverrides=",">
+			<if test="last != null and last != ''">
+				<![CDATA[ and fb311jzr>=to_char(today-#{last},'%Y%m%d') ]]>
+			</if>
+		</trim>
+		order by fb311jylsh desc
+	</select>
+
+
+	<!-- 获取n个工作日内转入大于m笔的[交易流水记录、总金额] - 分散转入 3006 -->
+	<select id="listgr3006flows" resultType="java.util.Map" parameterType="java.util.Map">
+		select trim(fb311khzh) account,count(fb311khzh) mcount,sum(fb311fse) amount 
+		from sb311
+		where fb311jdf=2 
+		<![CDATA[	and fb311dfzh<>'*' and fb311jybz not like '%手续费%'	]]>
+		<trim suffixOverrides=",">
+			<if test="last != null and last != ''">
+				<![CDATA[ and fb311jzr>=to_char(today-#{last},'%Y%m%d') ]]>
+			</if>
+		</trim>
+		group by fb311khzh having 1==1
+		<trim suffixOverrides=",">
+			<if test="count != null and count != ''">
+				<![CDATA[ and count(fb311khzh)>=#{count} ]]>
+			</if>
+		</trim>
+	</select>
+
+
+	<!-- 是否是集中转出的情况 [3*转出笔数<转入笔数、0.9*amount(转入金额)<转出金额<1.1*amount(转入金额)] - 集中转出 3006 -->
+	<select id="hasgr3006flows" resultType="java.lang.Integer" parameterType="java.util.Map">
+		select count(*)
+		from sb311
+		where fb311jdf=1 and
+		fb311khzh=#{account}
+		<![CDATA[	and fb311dfzh<>'*' and fb311jybz not like '%手续费%'	]]>
+		<trim suffixOverrides=",">
+			<if test="last != null and last != ''">
+				<![CDATA[ and fb311jzr>=to_char(today-#{last},'%Y%m%d') ]]>
+			</if>
+		</trim>
+		group by fb311khzh having 1==1
+		<trim suffixOverrides=",">
+			<if test="amount != null and amount != '' and amount != 0">
+				<![CDATA[ and sum(fb311fse)>=(0.9*#{amount}) and sum(fb311fse)<=(1.1*#{amount}) ]]>
+			</if>
+		</trim>
+	</select>
+
+
+
+	<!-- 获取n个工作日内转出大于m笔的[交易流水记录、总金额] - 分散转出 3007 -->
+	<select id="listgr3007flows" resultType="java.util.Map" parameterType="java.util.Map">
+		select trim(fb311khzh) account,count(fb311khzh) mcount,sum(fb311fse) amount 
+		from sb311
+		where fb311jdf=1
+		<![CDATA[	and fb311dfzh<>'*' and fb311jybz not like '%手续费%'	]]>
+		<trim suffixOverrides=",">
+			<if test="last != null and last != ''">
+				<![CDATA[ and fb311jzr>=to_char(today-#{last},'%Y%m%d') ]]>
+			</if>
+		</trim>
+		group by fb311khzh having 1==1
+		<trim suffixOverrides=",">
+			<if test="count != null and count != ''">
+				<![CDATA[ and count(fb311khzh)>=#{count} ]]>
+			</if>
+		</trim>
+	</select>
+
+
+	<!-- 是否是集中转入的情况 [3*转入笔数<=转出笔数、0.9*amount(转出金额)<转入金额<1.1*amount(转出金额)] - 集中转入 3007 -->
+	<select id="hasgr3007flows" resultType="java.lang.Integer" parameterType="java.util.Map">
+		select count(*)
+		from sb311
+		where fb311jdf=2 and
+		fb311khzh=#{account}
+		<![CDATA[	and fb311dfzh<>'*' and fb311jybz not like '%手续费%'	]]>
+		<trim suffixOverrides=",">
+			<if test="last != null and last != ''">
+				<![CDATA[ and fb311jzr>=to_char(today-#{last},'%Y%m%d') ]]>
+			</if>
+		</trim>
+		group by fb311khzh having 1==1
+		<trim suffixOverrides=",">
+			<if test="amount != null and amount != '' and amount != 0">
+				<![CDATA[ and sum(fb311fse)>=(0.9*#{amount}) and sum(fb311fse)<=(1.1*#{amount}) ]]>
+			</if>
+		</trim>
+	</select>
+	
+	
+	<!-- 获取n个工作日内,同一收付人多笔交易[交易流水记录、总金额] - 连续多笔交易 3008 -->
+	<select id="listgr3008flows" resultType="java.util.Map" parameterType="java.util.Map">
+		select fb311khzh khzh,fb311dfzh dfzh,(2*count(fb311khzh)-sum(fb311jdf)) countx,(sum(fb311jdf)-count(fb311khzh)) county 
+		from sb311
+		where 
+		<![CDATA[	fb311dfzh<>'*' and fb311khzh<>fb311dfzh and fb311dfzh is not null	]]>
+		<trim suffixOverrides=",">
+			<if test="last != null and last != ''">
+				<![CDATA[ and fb311jzr>=to_char(today-#{last},'%Y%m%d') ]]>
+			</if>
+		</trim>
+		group by fb311khzh,fb311dfzh having 1==1
+		<![CDATA[
+			and 2*count(fb311khzh)-sum(fb311jdf)>=3
+			and sum(fb311jdf)-count(fb311khzh)>=3
+		]]>
+		<!-- 
+			and ((2*count(fb311khzh)-sum(fb311jdf))/(sum(fb311jdf)-count(fb311khzh))<=2)
+			and ((sum(fb311jdf)-count(fb311khzh))/(2*count(fb311khzh)-sum(fb311jdf))<=2)
+		 -->
+	</select>
+
+</mapper>

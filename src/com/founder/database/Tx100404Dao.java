@@ -10,9 +10,14 @@ import cfca.safeguard.tx.business.bank.TxInvolvedAccount_Account;
 public interface Tx100404Dao {
 	
 	/**
-	 * 获取涉案账户信息<br>
+	 * 获取所有涉案账户客户号，进行轮询发送
 	 * 条件：通过定期账户扫描发现存量账户开户人信息在涉案账户；
 	 *    需将账号信息上报，平台上线时扫描，后期3-6个月扫描一次，报送6个月内交易数据。
+	 */
+	List<String> getF2001grCusts(Map<String,?> param);
+	
+	/**
+	 * 获取涉案账户信息<br>
 	 */
 	Tx100404 getF2001grCust(Map<String,?> param);
 	

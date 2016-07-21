@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.founder.database.Item405Dao" >
+
+	<resultMap id="tx405item" type="com.founder.beans.Tx405Item">
+		<result column="id" property="id" />
+		<result column="account_name" property="accountName" />
+		<result column="card_number" property="cardNumber" />
+		<result column="account_number" property="accountNumber" />
+		<result column="account_serial" property="accountSerial" />
+		<result column="account_type" property="accountType" />
+		<result column="account_status" property="accountStatus" />
+		<result column="pay_count" property="payCount" />
+		<result column="pay_amount" property="payAmount" />
+		<result column="pey_count" property="peyCount" />
+		<result column="pey_amount" property="peyAmount" />
+		<result column="exe_date" property="exeDate" />
+		<result column="feature" property="feature" />
+		<result column="file_path" property="filepath" />
+		<result column="status" property="status" />
+	</resultMap>
+	
+		<resultMap id="tx405itemdetail" type="com.founder.beans.Tx405Detail">
+		<result column="id" property="id" />
+		<result column="item_id" property="itemId" />
+		<result column="trans_flow" property="transFlow" />
+		<result column="trans_time" property="transTime" />
+		<result column="trans_count" property="transCount" />
+		<result column="trs_code" property="trsCode" />
+		<result column="acct_no" property="acctNo" />
+		<result column="acct_name" property="acctName" />
+		<result column="card_no" property="cardNo" />
+		<result column="vch_type" property="vchType" />
+		<result column="vch_code" property="vchCode" />
+		<result column="borrow_sign" property="borrowSign" />
+		<result column="trs_type" property="trsType" />
+		<result column="trs_amount" property="trsAmount" />
+		<result column="trs_balance" property="trsBalance" />
+		<result column="op_bank_no" property="opBankNo" />
+		<result column="op_bank_name" property="opBankName" />
+		<result column="op_acct_no" property="opAcctNo" />
+		<result column="op_acct_name" property="opAcctName" />
+	</resultMap>
+	
+	
+	
+	<insert id="addItem" useGeneratedKeys="true" keyProperty="id" parameterType="com.founder.beans.Tx405Item">
+		insert into tx405item (bankid,account_name,card_number,account_number,account_serial,account_type,account_status,pay_count,pay_amount,pey_count,pey_amount,exe_date,feature,file_path,status) 
+		values (#{bankid},#{accountName},#{cardNumber},#{accountNumber},#{accountSerial},#{accountType},#{accountStatus},#{payCount},#{payAmount},#{peyCount},#{peyAmount},#{exeDate},#{feature},#{filepath},#{status})
+	</insert>
+	
+	<select id="queryItemsByPage"  parameterType="java.util.Map" resultMap="tx405item">
+		select skip #{begin} first #{limit} *
+		from tx405item
+		where 1==1
+		<trim suffixOverrides=",">
+			<if test="transdate != null and transdate != ''">
+				and exe_date=#{transdate}
+			</if>
+			<if test="transtype != null and transtype != ''">
+				and feature=#{transtype}
+			</if>
+			<if test="status != null and status != ''">
+				and status=#{status}
+			</if>
+			<if test="bankid != null and bankid != ''">
+				and bankid=#{bankid}
+			</if>
+		</trim>
+	</select>
+	
+	<select id="queryItemsCount"  parameterType="java.util.Map" resultType="java.lang.Integer">
+		select count(*)
+		from tx405item
+		where 1==1
+		<trim suffixOverrides=",">
+			<if test="transdate != null and transdate != ''">
+				and exe_date=#{transdate}
+			</if>
+			<if test="transtype != null and transtype != ''">
+				and feature=#{transtype}
+			</if>
+			<if test="status != null and status != ''">
+				and status=#{status}
+			</if>
+			<if test="bankid != null and bankid != ''">
+				and bankid=#{bankid}
+			</if>
+		</trim>
+	</select>
+	
+	<update id="updateItem" parameterType="com.founder.beans.Tx405Item">
+		update tx405item set pay_count=#{payCount},pay_amount=#{payAmount},pey_count=#{peyCount},pey_amount=#{peyAmount}
+		where id=#{id}
+	</update>
+	
+	<update id="updateItemStatus" parameterType="com.founder.beans.Tx405Item">
+		update tx405item set
+		status=#{status},file_path=#{filepath}
+		where id=#{id}
+	</update>
+	
+	<select id="queryItemsById" parameterType="long" resultMap="tx405item">
+		select id,bankid,trim(account_name) account_name,trim(card_number) card_number,
+		trim(account_number) account_number,trim(account_serial) account_serial,trim(account_type) account_type,
+		trim(account_status) account_status,pay_count,pay_amount,pey_count,pey_amount,trim(exe_date) exe_date,
+		trim(feature) feature, trim(file_path) file_path,status
+		from tx405item where id=#{id}
+	</select>
+	
+	<insert id="addItemDetail" useGeneratedKeys="true" keyProperty="id" parameterType="com.founder.beans.Tx405Detail">
+		insert into tx405detail (
+			item_id,
+			trans_flow,
+			trans_time,
+			trans_count,
+			trs_code,
+			acct_no,
+			acct_name,
+			card_no,
+			vch_type,
+			vch_code,
+			borrow_sign,
+			trs_type,
+			trs_amount,
+			trs_balance,
+			op_bank_no,
+			op_bank_name,
+			op_acct_no,
+			op_acct_name
+		) 
+		values (
+			#{itemId},
+			#{transFlow},
+			#{transTime},
+			#{transCount},
+			#{trsCode},
+			#{acctNo},
+			#{acctName},
+			#{cardNo},
+			#{vchType},
+			#{vchCode},
+			#{borrowSign},
+			#{trsType},
+			#{trsAmount},
+			#{trsBalance},
+			#{opBankNo},
+			#{opBankName},
+			#{opAcctNo},
+			#{opAcctName}		
+		)
+	</insert>
+	
+	<select id="queryItemDetail" resultMap="tx405itemdetail">
+		select id,item_id,trim(trans_flow) trans_flow,trim(trans_time) trans_time,
+		trans_count,trim(trs_code) trs_code,trim(acct_no) acct_no,
+		trim(acct_name) acct_name,trim(card_no) card_no,trim(vch_type) vch_type,
+		trim(vch_code) vch_code,borrow_sign,trim(trs_type) trs_type,trs_amount,trs_balance,
+		trim(op_bank_no) op_bank_no,trim(op_bank_name) op_bank_name,trim(op_acct_no) op_acct_no,
+		trim(op_acct_name) op_acct_name  from tx405detail
+		where item_id=#{itemId}
+		order by trans_time
+	</select>
+	
+	<select id="getOpenBankId" resultType="integer" parameterType="String">
+		select fb3hh from gracct where fb3zh=#{account}
+	</select>
+	
+</mapper>   

@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.founder.database.Tx100401Dao" >
+
+	<resultMap id="tx401grCustMap" type="cfca.safeguard.api.bank.bean.tx.upstream.Tx100401">
+		<result column="fn20xm" property="victimName" />
+		<result column="fn20zjlx" property="victimIDType" />
+		<result column="fn20zjbh" property="victimIDNumber" />
+		<result column="fn20yddh" property="victimPhoneNumber" />
+	</resultMap>
+
+
+	<resultMap id="tx401grTransMap" type="cfca.safeguard.tx.business.bank.TxCaseReport_Transaction">
+		<result column="fb311jylsh" property="id" />
+		<result column="datetime" property="time" />
+		<result column="fb311ywlx" property="type" />
+		<result column="fb311biz" property="currency" />
+		<result column="fb311fse" property="transferAmount" />
+		<result column="fb311hh" property="transferOutBankID" />
+		<!-- <result column="transferOutBankName" property="transferOutBankName" /> -->
+		<!-- <result column="transferOutAccountName" property="transferOutAccountName" /> -->
+		<result column="fb311khzh" property="transferOutAccountNumber" />
+		<result column="fb311dfhh" property="transferInBankID" />
+		<!-- <result column="transferInBankName" property="transferInBankName" /> -->
+		<!-- <result column="transferInAccountName" property="transferInAccountName" /> -->
+		<result column="fb311dfzh" property="transferInAccountNumber" />
+		<!-- <result column="ip" property="ip" />
+		<result column="mac" property="mac" />
+		<result column="deviceID" property="deviceID" />
+		<result column="place" property="place" />
+		<result column="remark" property="remark" /> -->
+	</resultMap>
+	
+	
+	<sql id="tx401grCust_column">
+		fn20xm,fn20zjlx,fn20zjbh,fn20yddh
+	</sql>
+	
+	<sql id="tx401grAcnt_column">
+	</sql>
+	
+	<sql id="tx401grTrans_column">
+	</sql>
+
+
+	<!-- 根据受害人提供的条件，查询交易流水信息 -->
+	<select id="listgrTransactions" resultMap="tx401grTransMap" parameterType="java.util.Map">
+		select skip #{begin} first #{limit} fb311jylsh,to_char(fb311jzr,'%Y%m%d')||substr(fb311jysj,0,6) datetime,fb311ywlx,fb311biz,
+		fb311fse,fb311hh,
+		<!-- transferOutBankName,transferOutAccountName, -->
+		trim(fb311khzh) fb311khzh,fb311dfhh,
+		<!-- transferInBankName,transferInAccountName, -->
+		trim(fb311dfzh) fb311dfzh
+		<!-- ip,mac,deviceID,place,remark -->
+		from gracctdetail where 1==1
+		<trim suffixOverrides=",">
+			<if test="transflow != null and transflow != ''">
+				and fb311jylsh=#{transflow}
+			</if>
+			<if test="transdate != null and transdate != ''">
+				and fb311jzr=#{transdate}
+			</if>
+			<if test="amount != null and amount != ''">
+				and fb311fse=#{amount}
+			</if>
+			<if test="payno != null and payno != ''">
+				and fb311khzh=#{payno}
+			</if>
+			<if test="peyno != null and peyno != ''">
+				and fb311dfzh=#{peyno}
+			</if>
+		</trim>
+		order by fb311jylsh desc
+	</select>
+
+
+	<!-- 根据多个交易流水号，查询多个交易信息 -->
+	<select id="getgrTransactionsByFlows" resultMap="tx401grTransMap" parameterType="java.util.List">
+		select fb311jylsh,fb311jzr||fb311jysj datetime,fb311biz,
+		fb311fse,fb311hh,transferOutBankName,transferOutAccountName,fb311khzh,fb311dfhh,
+		transferInBankName,transferInAccountName,fb311dfzh,ip,mac,deviceID,place,remark 
+		from gracctdetail where fb311khzh=#{khzh}
+	</select>
+	
+	
+	<!-- 根据条件查询客户信息 -->
+	<select id="getFgrCust" resultMap="tx401grCustMap" parameterType="java.util.Map" >
+		select 
+		<include refid="tx401grCust_column"></include>
+		from grinfo where fn20khbh=#{khbh}
+	</select>
+	
+</mapper>   

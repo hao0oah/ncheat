@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.founder.database2.Tx100401Dao2" >
+
+	<resultMap id="tx401grCustMap" type="cfca.safeguard.api.bank.bean.tx.upstream.Tx100401">
+		<result column="fn20xm" property="victimName" />
+		<result column="fn20zjlx" property="victimIDType" />
+		<result column="fn20zjbh" property="victimIDNumber" />
+		<result column="fn20yddh" property="victimPhoneNumber" />
+	</resultMap>
+
+
+	<resultMap id="tx401grTransMap" type="cfca.safeguard.tx.business.bank.TxCaseReport_Transaction">
+		<result column="fb311jylsh" property="id" />
+		<result column="datetime" property="time" />
+		<result column="fb311ywlx" property="type" />
+		<result column="fb311biz" property="currency" />
+		<result column="fb311fse" property="transferAmount" />
+		<result column="fb311hh" property="transferOutBankID" />
+		<result column="zchm" property="transferOutBankName" />
+		<result column="acctname" property="transferOutAccountName" />
+		<result column="fb311khzh" property="transferOutAccountNumber" />
+		<result column="dfhh" property="transferInBankID" />
+		<result column="dfhm" property="transferInBankName" />
+		<result column="dfmc" property="transferInAccountName" />
+		<result column="fb311dfzh" property="transferInAccountNumber" />
+		<!-- <result column="ip" property="ip" />
+		<result column="mac" property="mac" /> -->
+		<result column="fb311jyjqh" property="deviceID" />
+		<!-- <result column="place" property="place" />
+		<result column="remark" property="remark" /> -->
+		<result column="iszf" property="isCeased"/>
+	</resultMap>
+	
+	
+	<sql id="tx401grCust_column">
+		fn20xm,fn20zjlx,fn20zjbh,fn20yddh
+	</sql>
+	
+	<sql id="tx401grAcnt_column">
+	</sql>
+	
+	<sql id="tx401grTrans_column">
+	</sql>
+
+
+	<!-- 根据受害人提供的条件，查询交易流水信息 -->
+	<select id="listgrTransactions" resultMap="tx401grTransMap" parameterType="java.util.Map">
+		select skip #{begin} first #{limit} fb311jylsh,to_char(fb311jzr,'%Y%m%d')||substr(lpad(fb311jysj,9,'0'),0,6) datetime,fb311ywlx,fb311biz,
+		fb311fse,fb311hh,bb1.fc2bhhm zchm,acctname,
+		trim(fb311khzh) fb311khzh,'-' dfhh,trim(nvl(fbb311dfhm,'')) dfhm,
+		trim(nvl(fb311dfmc,'')) dfmc, trim(fb311dfzh) fb311dfzh,fb311jyjqh,'0' iszf
+		from sb311 
+		left join v_acctname on fb311zh=acctno
+		left join bc2 bb1 on bb1.fc2hh=fb311hh
+		left join bc2 bb2 on bb2.fc2hh=fb311fsfhh
+		where 1==1
+		<trim suffixOverrides=",">
+			<if test="transflow != null and transflow != ''">
+				and fb311jylsh=#{transflow}
+			</if>
+			<if test="transdate != null and transdate != ''">
+				and fb311jzr=#{transdate}
+			</if>
+			<if test="amount != null and amount != ''">
+				and fb311fse=#{amount}
+			</if>
+			<if test="payno != null and payno != ''">
+				and fb311khzh=#{payno}
+			</if>
+			<if test="peyno != null and peyno != ''">
+				and fb311dfzh=#{peyno}
+			</if>
+		</trim>
+		order by fb311jylsh desc
+	</select>
+
+	<!-- 根据受害人提供的条件，查询交易流水信息 -->
+	<select id="getgrTransactionsCount" resultType="integer" parameterType="java.util.Map">
+		select count(*)
+		from sb311 
+		left join v_acctname on fb311zh=acctno
+		left join bc2 bb1 on bb1.fc2hh=fb311hh
+		left join bc2 bb2 on bb2.fc2hh=fb311fsfhh
+		where 1==1
+		<trim suffixOverrides=",">
+			<if test="transflow != null and transflow != ''">
+				and fb311jylsh=#{transflow}
+			</if>
+			<if test="transdate != null and transdate != ''">
+				and fb311jzr=#{transdate}
+			</if>
+			<if test="amount != null and amount != ''">
+				and fb311fse=#{amount}
+			</if>
+			<if test="payno != null and payno != ''">
+				and fb311khzh=#{payno}
+			</if>
+			<if test="peyno != null and peyno != ''">
+				and fb311dfzh=#{peyno}
+			</if>
+		</trim>
+	</select>
+
+	<!-- 根据多个交易流水号，查询多个交易信息 -->
+	<select id="getgrTransactionsByFlows" resultMap="tx401grTransMap" parameterType="java.util.List">
+		select fb311jylsh,to_char(fb311jzr,'%Y%m%d')||substr(lpad(fb311jysj,9,'0'),0,6) datetime,fb311ywlx,fb311biz,
+		fb311fse,fb311hh,bb1.fc2bhhm zchm,acctname
+		trim(fb311khzh) fb311khzh,'-' dfhh,trim(nvl(fbb311dfhm,'')) dfhm,
+		trim(nvl(fb311dfmc,'')) dfmc, trim(fb311dfzh) fb311dfzh,fb311jyjqh
+		from sb311 
+		left join v_acctname on fb311zh=acctno
+		left join bc2 bb1 on fc2hh=fb311hh
+		left join bc2 bb2 on fc2hh=fb311fsfhh
+		where fb311khzh=#{khzh}
+	</select>
+	
+	
+	<!-- 根据条件查询客户信息 -->
+	<select id="getFgrCust" resultMap="tx401grCustMap" parameterType="java.util.Map" >
+		select 
+		<include refid="tx401grCust_column"></include>
+		from sb3 where fn20khbh=#{khbh}
+	</select>
+	
+</mapper>   

@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.founder.database2.TransFlow01Dao" >
+	
+	<resultMap id="transflow01_Map" type="com.founder.beans.TransFlow01">
+		<result column="fb311khzh" property="acctNo"/>
+		<result column="acctname" property="acctName" />
+		<result column="fb311jzr" property="transDate" />
+		<result column="fb311jdf" property="acctType" />
+		<result column="fb311fse" property="amount" />
+		<result column="fb311ye" property="balance" />
+		<result column="fb311jybz" property="remark" />
+		<result column="fb311dfzh" property="opAcctNo" />
+		<result column="fb311dfmc" property="opAcctName" />
+		<result column="fb311dfhm" property="opBankName" />
+	</resultMap>
+
+	<sql id="tranflow01_gr_column">
+		trim(fb311khzh) fb311khzh,
+		trim(acctname) acctname,
+		fb311jzr,
+		fb311jdf,
+		fb311fse,fb311ye,
+		trim(fb311jybz) fb311jybz,
+		(case when fbb311dfhm is not null then trim(fb311dfzh) else '' end) fb311dfzh,
+		(case when fbb311dfhm is not null then trim(fb311dfmc) else '' end) fb311dfmc,
+		nvl(trim(fbb311dfhm),'') fb311dfhm
+	</sql>
+
+	<sql id="tranflow01_dg_column">
+		trim(fbb111khzh) fb311khzh,
+		trim(acctname) acctname,
+		fbb111jzr fb311jzr,
+		fbb111jdf fb311jdf,
+		fbb111fse fb311fse,fbb111ye fb311ye,
+		trim(fbb111jybz) fb311jybz,
+		(case when fbbb111dfhm is not null then trim(fbb111dfzh) else '' end) fb311dfzh,
+		(case when fbbb111dfhm is not null then trim(fbb111dfmc) else '' end) fb311dfmc,
+		nvl(trim(fbbb111dfhm),'') fb311dfhm
+	</sql>
+	
+	<!-- 获取个人交易明细 -->
+	<select id="listgrTrans01" resultMap="transflow01_Map" parameterType="java.util.Map">
+		select skip #{begin} first #{limit}
+		<include refid="tranflow01_gr_column"></include>
+		from sb311
+		left join v_acctname on fb311zh=acctno
+		where fb311khzh=#{khzh}
+		<trim suffixOverrides=",">
+			<if test="start != null and start != ''">
+				<![CDATA[ and fb311jzr>=#{start} ]]>
+			</if>
+			<if test="end != null and end != ''">
+				<![CDATA[ and fb311jzr<=#{end} ]]>
+			</if>
+		</trim>
+		order by fb311xh
+	</select>
+
+	<!-- 获取个人交易明细的个数 -->
+	<select id="listgrTrans01Count" resultType="java.lang.Integer" parameterType="java.util.Map">
+		select count(*)
+		from sb311
+		where fb311khzh=#{khzh}
+		<trim suffixOverrides=",">
+			<if test="start != null and start != ''">
+				<![CDATA[ and fb311jzr>=#{start} ]]>
+			</if>
+			<if test="end != null and end != ''">
+				<![CDATA[ and fb311jzr<=#{end} ]]>
+			</if>
+		</trim>
+	</select>
+
+	<!-- 获取对公交易明细 -->
+	<select id="listdgTrans01" resultMap="transflow01_Map" parameterType="java.util.Map">
+		select skip #{begin} first #{limit}
+		<include refid="tranflow01_dg_column"></include>
+		from sbb111
+		left join v_acctname on fbb111khzh=acctno
+		where fbb111khzh=#{khzh}
+		<trim suffixOverrides=",">
+			<if test="start != null and start != ''">
+				<![CDATA[ and fbb111jzr>=#{start} ]]>
+			</if>
+			<if test="end != null and end != ''">
+				<![CDATA[ and fbb111jzr<=#{end} ]]>
+			</if>
+		</trim>
+		order by fbb111xh
+	</select>
+
+
+	<!-- 获取对公交易明细的个数 -->
+	<select id="listdgTrans01Count" resultType="java.lang.Integer" parameterType="java.util.Map" >
+		select count(*)
+		from sbb111
+		where fbb111khzh=#{khzh}
+		<trim suffixOverrides=",">
+			<if test="start != null and start != ''">
+				<![CDATA[ and fbb111jzr>=#{start} ]]>
+			</if>
+			<if test="end != null and end != ''">
+				<![CDATA[ and fbb111jzr<=#{end} ]]>
+			</if>
+		</trim>
+	</select>
+
+	<!-- 根据证件号获取所有个人账户的余额 -->
+	<select id="getgrBalance" resultType="java.util.Map" parameterType="java.util.Map" >
+		select sum(fb3ye) balance from sb3 ,sn20
+		where fb3khbh=fn20khbh
+		and fn20zjbh=#{idcard}
+		and substr(fb3bz,1,1)='0'
+	</select>
+	
+	<!-- 根据证件号获取所有对公账户的余额 -->
+	<select id="getdgBalance" resultType="string" parameterType="java.util.Map" >
+		select limit 1 10000 from sbb111
+	</select>
+	
+</mapper>

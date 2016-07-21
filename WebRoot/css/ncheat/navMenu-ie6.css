@@ -1,0 +1,24 @@
+/**
+* navMenu-ie6.css
+*/
+
+#navBar {
+    position: fixed;
+    _position: absolute;
+    _bottom: auto;
+    _top: expression(eval(document.documentElement.scrollTop));
+    top: 0px;
+    width: 100%;
+    height: 40px;
+    background-color: #a40000;
+    z-index: 0;
+}
+
+#navMenu {
+    position: fixed;
+    _position: absolute;
+    _bottom: auto;
+    _top: expression(eval(document.documentElement.scrollTop + 60));
+    /*top: 60px;*/
+    z-index: 1;
+}

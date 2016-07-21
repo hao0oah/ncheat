@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.founder.database.TellerDao" >
+	
+	<insert id="addTeller">
+		insert into teller values (#{userid},#{username},#{password},#{name},#{telephone},#{email},#{roleid},#{status})
+	</insert>
+	
+	<update id="updateTeller" >
+		update teller
+		<trim prefix="set" suffixOverrides=",">
+			<if test="username != null and username != ''">
+				username=#{username},
+			</if>
+			<if test="password != null and password != ''">
+				password=#{password},
+			</if>
+			<if test="name != null and name != ''">
+				name=#{name},
+			</if>
+			<if test="telephone != null and telephone != ''">
+				telephone=#{telephone},
+			</if>
+			<if test="email != null and email != ''">
+				email=#{email},
+			</if>
+			<if test="roleid != null and roleid != '' and roleid != 0">
+				roleid=#{roleid},
+			</if>
+			<if test="status != null and status != '' and status != 0">
+				status=#{status}
+			</if>
+		</trim>
+		where userid=#{userid}
+	</update>
+	
+	<select id="getTellerById" resultType="com.founder.beans.Teller">
+		select userid,trim(username) username,password,trim(name) name,trim(telephone) telephone,trim(email) email,roleid,status from teller where userid=#{0}
+	</select>
+	
+	<select id="getAllTeller" resultType="com.founder.beans.Teller">
+		select userid,trim(username) username,password,trim(name) name,trim(telephone) telephone,trim(email) email,roleid,status from teller
+	</select>
+	
+	<select id="getMenus" resultType="com.founder.beans.Menu">
+		select menu.menuid,trim(menu.title) title,trim(menu.url) url,menu.status from role_menu
+		left join menu on role_menu.menuid=menu.menuid
+		left join teller on role_menu.roleid=teller.roleid
+		where userid=#{userid} order by menuid
+	</select>
+	
+	<insert id="addOptRecord" parameterType="java.util.Map">
+		insert into optrecord values (#{userid},#{type},#{feature},#{optdate},#{opttime},#{param},#{trsdate})
+	</insert>
+	
+	<select id="queryRecordByPage" parameterType="java.util.Map" resultType="java.util.Map">
+		select skip #{begin} first #{limit} * from optrecord
+		<trim prefix="WHERE"  prefixOverrides="AND |OR ">
+			<if test="userid != null and userid != '' and userid != 0">
+				userid=#{userid}
+			</if>
+			<if test="optdate != null and optdate != ''">
+				and optdate=#{optdate}
+			</if>
+		</trim>
+	</select>
+	
+	<select id="queryRecordCount" parameterType="java.util.Map" resultType="integer">
+		select count(*) from optrecord
+		<trim prefix="WHERE"  prefixOverrides="AND |OR ">
+			<if test="userid != null and userid != '' and userid != 0">
+				userid=#{userid}
+			</if>
+			<if test="optdate != null and optdate != ''">
+				and optdate=#{optdate}
+			</if>
+		</trim>
+	</select>
+	
+	<select id="existRecord" parameterType="java.util.Map" resultType="integer">
+		select count(*) from optrecord where optdate=#{optdate} and type=#{type} and feature=#{feature}
+	</select>
+	
+</mapper>

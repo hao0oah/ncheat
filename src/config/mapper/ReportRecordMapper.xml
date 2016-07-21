@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.founder.database.RecordDao" >
+
+	<resultMap id="recordMap" type="com.founder.beans.ReportRecord">
+		<result column="sbxh" property="serail" />
+		<result column="khbh" property="custNo" />
+		<result column="sbsj" property="reportTime" />
+		<result column="pfkhbz" property="flag1001" />
+		<result column="ljkhbz" property="flag1002" />
+		<result column="sbzt" property="status" />
+	</resultMap>
+
+	<sql id="all_column">
+		sbxh,khbh,sbsj,pfkhbz,ljkhbz,sbzt
+	</sql>
+
+	<insert id="insert" parameterType="com.founder.beans.ReportRecord">
+		insert into kykhsb (khbh,pfkhbz,ljkhbz,sbzt)
+		values (#{custNo},#{flag1001},#{flag1002},#{status})
+	</insert>
+	
+	<!-- 获取可疑客户卡号信息 -->
+	<select id="selectById" resultMap="recordMap" parameterType="int">
+		select 
+		<include refid="all_column"/>
+		from kykhsb where sbxh=#{id}
+	</select>
+
+	<select id="selectByCust" resultMap="recordMap" parameterType="java.util.Map">
+		select 
+		<include refid="all_column"/>
+		from kykhsb where khbh=#{khbh}
+		<trim suffixOverrides=",">
+			<if test="flag1001 != null and flag1001 != ''">
+				and pfkhbz=#{flag1001}
+			</if>
+			<if test="flag1002 != null and flag1002 != ''">
+				and pfkhbz=#{flag1002}
+			</if>
+		</trim>
+		and sbzt=0
+	</select>
+
+</mapper>
