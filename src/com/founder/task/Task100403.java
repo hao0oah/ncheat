@@ -7,13 +7,21 @@ import com.founder.beans.Com;
 import com.founder.service.BaseService;
 import com.founder.tools.DateUtil;
 
-public class UpTask {
+public class Task100403 {
 	
-	private static final Logger log = Logger.getLogger(UpTask.class);
+	private static final Logger log = Logger.getLogger(Task100403.class);
 	
 	@Resource(name="tx100403")
 	private BaseService tx100403;
 
+	/**
+	 * 取消上传可疑账户
+	 */
+	public void task0000() throws Exception{
+		log.info("[时间："+DateUtil.getNow()+"，取消上传可疑账户]");
+		tx100403.execute(Com.F0000);
+	}
+	
 	/**
 	 * 定时任务，上传频繁开户可疑账户信息
 	 */
